@@ -1,0 +1,109 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: synchain-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: synchain
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: synchain-redis
+    ports:
+      - "6379:6379"
+
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: synchain-ai-service
+    ports:
+      - "8001:8001"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+    volumes:
+      - ./ai-service:/app
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: synchain-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/synchain
+      - REDIS_URL=redis://redis:6379/0
+      - AI_SERVICE_URL=http://ai-service:8001
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME:-demo}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY:-demo}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET:-demo}
+      - MAILTRAP_HOST=sandbox.smtp.mailtrap.io
+      - MAILTRAP_PORT=2525
+      - MAILTRAP_USER=${MAILTRAP_USER:-}
+      - MAILTRAP_PASS=${MAILTRAP_PASS:-}
+      - WHATSAPP_TOKEN=${WHATSAPP_TOKEN:-}
+      - WHATSAPP_PHONE_ID=${WHATSAPP_PHONE_ID:-}
+      - WEBHOOK_VERIFY_TOKEN=synchain_webhook_verify
+      - WHATSAPP_TEAM_NUMBER=${WHATSAPP_TEAM_NUMBER:-}
+      - SECRET_KEY=dev-secret-key
+      - PO_APPROVAL_THRESHOLD=50000
+    depends_on:
+      - postgres
+      - redis
+      - ai-service
+    restart: unless-stopped
+
+  celery-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: synchain-celery
+    command: celery -A app.tasks.celery_tasks worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/synchain
+      - REDIS_URL=redis://redis:6379/0
+      - AI_SERVICE_URL=http://ai-service:8001
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME:-demo}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY:-demo}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET:-demo}
+      - MAILTRAP_HOST=sandbox.smtp.mailtrap.io
+      - MAILTRAP_PORT=2525
+      - MAILTRAP_USER=${MAILTRAP_USER:-}
+      - MAILTRAP_PASS=${MAILTRAP_PASS:-}
+      - WHATSAPP_TOKEN=${WHATSAPP_TOKEN:-}
+      - WHATSAPP_PHONE_ID=${WHATSAPP_PHONE_ID:-}
+      - SECRET_KEY=dev-secret-key
+      - PO_APPROVAL_THRESHOLD=50000
+    depends_on:
+      - postgres
+      - redis
+      - ai-service
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: synchain-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_WS_URL=ws://localhost:8000
+    volumes:
+      - ./frontend/src:/app/src
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
