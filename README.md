@@ -7,7 +7,7 @@ synchain-ai/
 │   │   ├── main.py                   # FastAPI app, routers, middleware
 │   │   ├── models/
 │   │   │   ├── __init__.py
-│   │   │   └── all_models.py         # All SQLAlchemy ORM models
+│   │   │   └── all_models.py         # All the SQLAlchemy ORM models
 │   │   ├── schemas/
 │   │   │   ├── __init__.py
 │   │   │   ├── procurement.py
