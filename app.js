@@ -1,4 +1,4 @@
-// SupplyHub - Complete Frontend Application
+// SupplyHub - Complete Frontend Application for app
 
 // ─── DUMMY DATA ───
 const DATA = {
