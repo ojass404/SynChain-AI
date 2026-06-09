@@ -1,6 +1,16 @@
 # SynChain AI 🚀
 
-Autonomous Supply Chain Procurement Agent for Indian SMBs
+SynChain AI is an Autonomous Supply Chain Procurement Agent for Indian SMBs (Small and Medium Businesses).
+
+The Problem It Solves:
+
+Indian small businesses waste hours every day on procurement:
+1) Calling vendors for price quotes
+2) Comparing offers manually
+3) Negotiating prices over phone/WhatsApp
+4) Checking GST compliance
+5) Generating purchase orders
+6) Getting manager approvals
 
 ## Quick Start
 
