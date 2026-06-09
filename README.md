@@ -21,3 +21,13 @@ docker exec -i synchain-postgres psql -U postgres -d synchain < backend/init.sql
 # Frontend:    http://localhost:5173
 # Backend API: http://localhost:8000/docs
 # AI Service:  http://localhost:8001/docs
+
+HOW ALL PIECES CONNECT:
+
+USER → Frontend (React) → Backend (FastAPI) → AI Service (FastAPI)
+                ↕                ↕                    ↕
+           WebSocket        PostgreSQL            ML Models
+                            Redis (Celery)        Vendor CSV
+                            Cloudinary            Policy Docs
+                            Mailtrap              FAISS Index
+                            WhatsApp API
