@@ -1,0 +1,77 @@
+synchain-ai/
+├── .gitignore
+├── docker-compose.yml
+├── README.md
+├── .env.example
+│
+├── backend/
+│   ├── .env
+│   ├── Dockerfile
+│   ├── init.sql
+│   ├── requirements.txt
+│   ├── venv/                          # Virtual environment (gitignored)
+│   └── app/
+│       ├── __init__.py
+│       ├── main.py                    # FastAPI entry point
+│       ├── config.py                  # Settings
+│       ├── database.py                # Async SQLAlchemy
+│       ├── models/
+│       │   ├── __init__.py
+│       │   └── all_models.py          # All 12 ORM models
+│       ├── schemas/
+│       │   ├── __init__.py
+│       │   ├── procurement.py
+│       │   ├── vendor.py
+│       │   └── project.py
+│       ├── routers/
+│       │   ├── __init__.py
+│       │   ├── procurement.py         # POST/GET/DELETE
+│       │   ├── vendors.py             # Vendor CRUD + notes
+│       │   ├── rfqs.py                # RFQ inbox + compare
+│       │   ├── approvals.py           # PO approve/reject
+│       │   ├── analytics.py           # Dashboard stats
+│       │   └── projects.py            # Project CRUD
+│       ├── websocket/
+│       │   ├── __init__.py
+│       │   └── agent_feed.py          # WebSocket manager
+│       ├── tasks/
+│       │   ├── __init__.py
+│       │   └── celery_tasks.py        # Procurement pipeline
+│       └── services/
+│           ├── __init__.py
+│           ├── ai_client.py           # HTTP client to AI service
+│           ├── email_service.py       # Mailtrap SMTP
+│           ├── pdf_service.py         # ReportLab PO PDF
+│           └── whatsapp_service.py    # WhatsApp Cloud API
+│
+├── ai-service/
+│   ├── .env
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── venv/                          # Virtual environment (gitignored)
+│   ├── app/
+│   │   ├── __init__.py
+│   │   └── main.py                    # All AI endpoints (simplified)
+│   ├── data/
+│   │   ├── vendors.csv                # 10 vendor records
+│   │   └── policy_docs/
+│   │       ├── gst_rules.txt
+│   │       ├── company_policy.txt
+│   │       └── msme_guidelines.txt
+│   ├── models/                        # Trained models (gitignored)
+│   │   └── .gitkeep
+│   └── fine_tuning/                   # Future: LoRA scripts
+│
+├── frontend/
+│   ├── index.html                     # HTML entry point
+│   ├── package.json                   # Dependencies (minimal)
+│   ├── vite.config.js                 # Vite config
+│   ├── node_modules/                  # (gitignored)
+│   └── src/
+│       └── main.jsx                   # ENTIRE app in one file
+│
+└── .github/
+    └── workflows/
+        ├── backend-deploy.yml
+        ├── frontend-deploy.yml
+        └── ai-service-deploy.yml
