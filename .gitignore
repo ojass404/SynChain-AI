@@ -1,0 +1,48 @@
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+*.egg
+
+# Environment
+.env
+.env.local
+
+# Models (large files)
+*.pth
+*.pt
+*.bin
+*.safetensors
+*.keras
+*.h5
+ai-service/models/*
+!ai-service/models/.gitkeep
+
+# Node
+node_modules/
+dist/
+build/
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+.DS_Store
+
+# Logs
+*.log
+
+# Data (except source files)
+ai-service/data/*.pkl
+ai-service/data/*.faiss
+ai-service/data/*.json
+!ai-service/data/vendors.csv
+!ai-service/data/*.jsonl
+EOF
