@@ -1,4 +1,4 @@
-# SynChain AI 🚀
+# SynChain AI 
 
 SynChain AI is an Autonomous Supply Chain Procurement Agent for Indian SMBs (Small and Medium Businesses).
 
